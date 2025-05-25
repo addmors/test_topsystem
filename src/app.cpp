@@ -33,7 +33,7 @@ void app::Init(uint16_t width, uint16_t height)
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 	glfwWindowHint(GLFW_SAMPLES, 4);
 
-	m_window = glfwCreateWindow(width, height, "test nano", nullptr, nullptr);
+	m_window = glfwCreateWindow(width, height, "test topsystem", nullptr, nullptr);
 	glfwMakeContextCurrent(m_window);
 
 	g_app_key_callbacks[m_window] = [this](GLFWwindow* window, int key, int scancode, int action, int mode) { key_callback(window, key, scancode, action, mode); };
