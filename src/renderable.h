@@ -8,4 +8,5 @@ class renderable
 public:
 	virtual void render(app*) = 0;
 	virtual bbox get_bbox() = 0;
+	virtual ~renderable() = default;
 };

@@ -1,4 +1,4 @@
-#include "camera.h"
+﻿#include "camera.h"
 #include <glm/gtc/matrix_transform.hpp>
 
 static constexpr float mouse2angle(int shift)
@@ -36,6 +36,7 @@ void camera::zoom_to_fit(const bbox& box)
 	update_view();
 	calculate_near_far(box);
 	update_projection();
+	m_bbox = box;
 }
 
 void camera::calculate_near_far(const bbox& box) 
@@ -62,7 +63,7 @@ void camera::OnMouseMove(const glm::ivec2& pos)
 	glm::ivec2 shift = pos - m_last_mouse_pos;
 	m_last_mouse_pos = pos;
 	if(m_in_drag)
-		produce_rotate(shift);
+		produce_pan(shift);
 }
 
 void camera::OnRMouseDown()
@@ -112,6 +113,34 @@ void camera::produce_rotate(const glm::ivec2& shift)
 	m_position = m_target + glm::vec3(view_rot[0][2], view_rot[1][2], view_rot[2][2]) * glm::length(m_position - m_target);
 	update_view();
 }
+
+void camera::produce_pan(const glm::ivec2& shift)
+{
+	glm::mat4 view_rot = glm::mat4(m_rotation);
+	glm::vec3 up = glm::normalize(glm::vec3(view_rot[0][1], view_rot[1][1], view_rot[2][1]));
+
+	glm::vec3 front = m_target - m_position;
+	float length = glm::length(front);
+	front = glm::normalize(front);
+	glm::vec3 right = glm::normalize(glm::cross(front, up));
+
+	glm::mat4 invVP = glm::inverse(m_proj_matrix * m_view_matrix);
+
+	glm::vec4 deltaNDC = glm::vec4( //TODO
+		(-2.0f * shift.x) / 1600.0f,
+		(2.0f * shift.y) / 1600.0f,
+		0.0f,
+		0.0f
+	);
+
+	glm::vec4 deltaWorld = invVP * deltaNDC;
+	glm::vec3 offset = glm::vec3(deltaWorld) * 2.0f; //TODO
+
+	m_position += offset;
+	m_target += offset;
+	update_view();
+}
+
 
 void camera::update_view()
 {

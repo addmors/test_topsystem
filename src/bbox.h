@@ -28,6 +28,16 @@ struct bbox
         return { (x_max + x_min) / 2.0f, (y_max + y_min) / 2.0f, (z_max + z_min) / 2.0f };
     }
 
+	glm::vec3 get_min() const
+	{
+		return {x_min, y_min, z_min};
+	};
+
+	glm::vec3 get_max() const
+	{
+		return { x_max, y_max, z_max };
+	};
+
 	void enlarge(const bbox& enlarger)
 	{
 		if (x_min > enlarger.x_min)	x_min = enlarger.x_min;

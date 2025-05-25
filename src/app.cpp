@@ -56,12 +56,16 @@ void app::Init(uint16_t width, uint16_t height)
 
 void app::Run()
 {
-	bbox box = m_renderable.at(0)->get_bbox();
+	if (!m_renderable.empty()) 
+	{
+		bbox box = m_renderable.at(0)->get_bbox();
 
-	for (auto& renderable : m_renderable)
-		box.enlarge(renderable->get_bbox());
-	
-	m_camera.zoom_to_fit(box);
+		for (const auto& renderable : m_renderable)
+			box.enlarge(renderable->get_bbox());
+
+		m_camera.zoom_to_fit(box);
+	}
+
 	while (!glfwWindowShouldClose(m_window))
 	{
 		glfwPollEvents();
@@ -109,12 +113,15 @@ void app::key_callback(GLFWwindow* window, int key, int scancode, int action, in
 
 		if (key == GLFW_KEY_SPACE)
 		{
-			bbox box = m_renderable.at(0)->get_bbox();
+			if(!m_renderable.empty())
+			{
+				bbox box = m_renderable.at(0)->get_bbox();
 
-			for (auto& renderable : m_renderable)
-				box.enlarge(renderable->get_bbox());
+				for (const auto& renderable : m_renderable)
+					box.enlarge(renderable->get_bbox());
 
-			m_camera.zoom_to_fit(box);
+				m_camera.zoom_to_fit(box);
+			}
 		}
 
 		for (const auto& interact : m_interactive)

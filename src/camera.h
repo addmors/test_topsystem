@@ -28,6 +28,7 @@ public:
 
 private:
 	void produce_rotate(const glm::ivec2& shift);
+	void produce_pan(const  glm::ivec2& shift);
 	void update_view();
 	void update_projection();
 	void calculate_near_far(const bbox& box);
@@ -49,4 +50,5 @@ private:
 	bool m_in_drag = false;
 
 	glm::ivec2 m_last_mouse_pos = glm::ivec2(0, 0);
+	bbox m_bbox;
 };

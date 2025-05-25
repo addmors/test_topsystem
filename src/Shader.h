@@ -12,7 +12,9 @@ class Shader
 public:
     unsigned int ID;
     // constructor generates the shader on the fly
-    Shader(const std::filesystem::path& vertexPath, const std::filesystem::path& fragmentPath, const std::filesystem::path& geometryPath = std::filesystem::path());
+    explicit Shader(const std::filesystem::path& vertexPath, const std::filesystem::path& fragmentPath, const std::filesystem::path& geometryPath = std::filesystem::path());
+
+    explicit Shader(const std::string& vertexPath, const std::string& fragmentPath, const std::string& geometryPath = {});
     ~Shader();
     void use();
 
