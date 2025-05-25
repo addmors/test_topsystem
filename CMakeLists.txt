@@ -1,0 +1,42 @@
+cmake_minimum_required( VERSION 3.5 )
+set(CMAKE_CXX_STANDARD 20)
+
+project(test)
+
+function(GroupSourcesByFolder target) 
+  set(SOURCE_GROUP_DELIMITER "/")
+  set(last_dir "")
+  set(files "")
+
+  get_target_property(sources ${target} SOURCES)
+  foreach(file ${sources})                                            
+    file(RELATIVE_PATH relative_file "${PROJECT_SOURCE_DIR}" ${file}) 
+    get_filename_component(dir "${relative_file}" PATH)               
+    if(NOT "${dir}" STREQUAL "${last_dir}")
+      if(files)
+        source_group("${last_dir}" FILES ${files})
+        message(${files})
+      endif()
+      set(files "")
+    endif()
+    set(files ${files} ${file})
+    set(last_dir "${dir}")
+  endforeach()
+
+  if(files)
+    source_group("${last_dir}" FILES ${files})
+  endif()
+endfunction()
+
+set( GLFW_BUILD_DOCS OFF CACHE BOOL  "GLFW lib only" )
+set( GLFW_INSTALL OFF CACHE BOOL  "GLFW lib only" )
+set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR})
+
+add_subdirectory(glfw)
+add_subdirectory(glm)
+set(GLEW_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/glew)
+add_library(glew INTERFACE IMPORTED )
+target_include_directories(glew SYSTEM INTERFACE ${GLEW_ROOT}/include)
+target_link_libraries( glew INTERFACE ${GLEW_ROOT}/lib/Release/x64/glew32s.lib)
+add_subdirectory(src)
+
