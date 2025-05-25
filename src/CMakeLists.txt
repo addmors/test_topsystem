@@ -29,4 +29,3 @@ set_target_properties( test_topsystem
 )
 
 target_link_libraries( test_topsystem PRIVATE ${OPENGL_LIBRARIES} glfw glm glew)
-target_include_directories(test_topsystem PRIVATE ${GLEW_ROOT}/include ${OPENGL_INCLUDE_DIRS})

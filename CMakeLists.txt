@@ -28,15 +28,14 @@ function(GroupSourcesByFolder target)
   endif()
 endfunction()
 
-set( GLFW_BUILD_DOCS OFF CACHE BOOL  "GLFW lib only" )
-set( GLFW_INSTALL OFF CACHE BOOL  "GLFW lib only" )
-set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR})
+add_subdirectory(submodules)
 
-add_subdirectory(glfw)
-add_subdirectory(glm)
-set(GLEW_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/glew)
-add_library(glew INTERFACE IMPORTED )
-target_include_directories(glew SYSTEM INTERFACE ${GLEW_ROOT}/include)
-target_link_libraries( glew INTERFACE ${GLEW_ROOT}/lib/Release/x64/glew32s.lib)
+set(GLEW_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/submodules/glew)
+
+add_library(glew STATIC IMPORTED)
+set_target_properties(glew PROPERTIES
+    IMPORTED_LOCATION "${GLEW_ROOT}/lib/Release/x64/glew32s.lib"
+    INTERFACE_INCLUDE_DIRECTORIES "${GLEW_ROOT}/include"
+)
+
 add_subdirectory(src)
-
